@@ -15,6 +15,7 @@ mix.webpackConfig({
             type: 'umd',
         },
     },
+    externals: '@prettier/sync'
 })
 
 mix.alias({
