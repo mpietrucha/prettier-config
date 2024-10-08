@@ -13,10 +13,10 @@ mix.webpackConfig({
         library: {
             name: package.name,
             type: 'umd',
-            export: 'default'
+            export: 'default',
         },
     },
-    externals: '@prettier/sync'
+    externals: Object.keys(package.dependencies),
 })
 
 mix.alias({
