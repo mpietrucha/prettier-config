@@ -44,7 +44,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__prettier_sync__;
   \**************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"tabWidth":4,"semi":false,"printWidth":200,"singleQuote":true,"arrowParens":"avoid","plugins":["prettier-plugin-tailwindcss","prettier-plugin-organize-imports","prettier-plugin-packagejson"]}');
+module.exports = /*#__PURE__*/JSON.parse('{"tabWidth":4,"semi":false,"printWidth":200,"singleQuote":true,"arrowParens":"avoid","vueIndentScriptAndStyle":true,"plugins":["prettier-plugin-tailwindcss","prettier-plugin-organize-imports","prettier-plugin-packagejson"]}');
 
 /***/ })
 
