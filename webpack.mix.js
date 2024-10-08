@@ -13,6 +13,7 @@ mix.webpackConfig({
         library: {
             name: package.name,
             type: 'umd',
+            export: 'default'
         },
     },
     externals: '@prettier/sync'
