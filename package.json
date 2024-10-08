@@ -1,16 +1,16 @@
 {
-  "name": "@off-site/prettier-config",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "author": {
-    "name": "Michał Pietrucha",
-    "email": "michal.pietrucha@off-site.pl"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "laravel-mix": "^6.0.49"
-  },
-  "dependencies": {
-    "@prettier/sync": "^0.5.2"
-  }
+    "name": "@mpietrucha/prettier-config",
+    "version": "1.0.1",
+    "main": "dist/index.js",
+    "author": {
+        "name": "Michał Pietrucha",
+        "email": "michal.pietrucha@off-site.pl"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "laravel-mix": "^6.0.49"
+    },
+    "dependencies": {
+        "@prettier/sync": "^0.5.2"
+    }
 }

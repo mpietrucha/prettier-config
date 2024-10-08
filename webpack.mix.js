@@ -1,16 +1,27 @@
+const path = require('path')
 const mix = require('laravel-mix')
 const package = require('./package.json')
 
 mix.options({
-    manifest: false
+    manifest: false,
 })
 
 mix.webpackConfig({
+    target: 'node',
     output: {
-        libraryTarget: 'umd',
         globalObject: 'this',
-        library: package.name
-    }
+        library: {
+            name: package.name,
+            type: 'umd',
+        },
+    },
 })
 
-;['src/index.js', 'src/builder.js'].forEach(source => mix.js(source, 'dist'))
+mix.alias({
+    '~': __dirname,
+    '@': path.join(__dirname, 'src'),
+})
+
+const bundles = ['src/index.js', 'src/builder.js']
+
+bundles.forEach(bundle => mix.js(bundle, 'dist'))
