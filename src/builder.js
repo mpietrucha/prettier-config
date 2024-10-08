@@ -5,4 +5,4 @@ const config = path => prettier.resolveConfig(path) || {}
 
 const build = (path, options = {}) => ({ ...options, ...config(path), ...defaults })
 
-export default { build, config }
+export default { build, config, prettier }
