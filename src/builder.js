@@ -8,5 +8,3 @@ export const build = (path, options = {}) => ({
     ...config(path),
     ...defaults,
 })
-
-export default build

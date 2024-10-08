@@ -125,8 +125,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   build: () => (/* binding */ build),
-/* harmony export */   config: () => (/* binding */ config),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   config: () => (/* binding */ config)
 /* harmony export */ });
 /* harmony import */ var _index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/index.js */ "./src/index.js");
 /* harmony import */ var _prettier_sync__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @prettier/sync */ "@prettier/sync");
@@ -146,7 +145,6 @@ var build = function build(path) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   return _objectSpread(_objectSpread(_objectSpread({}, options), config(path)), _index_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (build);
 })();
 
 __webpack_exports__ = __webpack_exports__["default"];
