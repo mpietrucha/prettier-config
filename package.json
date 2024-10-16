@@ -1,6 +1,6 @@
 {
-    "name": "@mpietrucha/prettier-config",
-    "version": "1.1.2",
+    "name": "@mpietrucha/prettier",
+    "version": "1.1.3",
     "license": "MIT",
     "author": {
         "name": "Michał Pietrucha",
@@ -9,30 +9,32 @@
     "type": "module",
     "exports": {
         ".": {
-            "import": "./dist/index.js",
+            "import": "./dist/index.mjs",
             "require": "./dist/index.cjs"
         },
-        "./builder": {
-            "import": "./dist/builder.js",
-            "require": "./dist/builder.cjs"
+        "./config": {
+            "import": "./dist/config.mjs",
+            "require": "./dist/config.cjs"
+        },
+        "./writer": {
+            "import": "./dist/writer.mjs",
+            "require": "./dist/writer.cjs"
         }
     },
     "main": "./dist/index.cjs",
-    "module": "./dist/index.js",
+    "module": "./dist/index.mjs",
     "files": [
         "dist"
     ],
+    "prettier": "@mpietrucha/prettier",
     "dependencies": {
-        "@prettier/sync": "^0.5.2"
-    },
-    "devDependencies": {
-        "prettier": "^3.3.3",
-        "vite": "^5.4.8"
-    },
-    "peerDependencies": {
+        "glob": "^11.0.0",
         "prettier": "^3.3.3",
         "prettier-plugin-organize-imports": "^4.1.0",
         "prettier-plugin-packagejson": "^2.5.3",
         "prettier-plugin-tailwindcss": "^0.6.8"
+    },
+    "devDependencies": {
+        "unbuild": "^2.0.0"
     }
 }

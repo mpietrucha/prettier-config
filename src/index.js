@@ -1,3 +1,13 @@
-import config from '~/.prettierrc.json'
-
-export default config
+export default {
+    tabWidth: 4,
+    semi: false,
+    printWidth: 80,
+    singleQuote: true,
+    arrowParens: 'avoid',
+    vueIndentScriptAndStyle: true,
+    plugins: [
+        'prettier-plugin-tailwindcss',
+        'prettier-plugin-organize-imports',
+        'prettier-plugin-packagejson',
+    ],
+}
