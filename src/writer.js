@@ -25,6 +25,7 @@ export default class Writer {
 
         const files = await glob('**/**', {
             nodir: true,
+            ansolute: true,
             cwd: this.options.root,
             ignore: this.options.ignore,
         }).then(files => files.map(write))
