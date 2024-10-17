@@ -1,5 +1,5 @@
 import Config from '@/config'
-import Cache from 'file-system-cache'
+import { Cache } from 'file-system-cache'
 import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 import { glob } from 'glob'
