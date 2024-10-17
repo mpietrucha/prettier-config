@@ -1,6 +1,6 @@
 import Config from '@/config'
 import Cache from 'file-system-cache'
-import { exists, readFile, writeFile } from 'fs/promises'
+import { existsSync, readFile, writeFile } from 'fs/promises'
 import { glob } from 'glob'
 import { hash } from 'hasha'
 import { resolve } from 'path'
@@ -43,7 +43,7 @@ export default class Writer {
     }
 
     async read(file) {
-        if (!exists(file)) {
+        if (!existsSync(file)) {
             return
         }
 
