@@ -1,23 +1,69 @@
 import Config from '@/config'
-import { readFile, writeFile } from 'fs/promises'
+import Cache from 'file-system-cache'
+import { exists, readFile, writeFile } from 'fs/promises'
 import { glob } from 'glob'
+import { hash } from 'hasha'
+import { resolve } from 'path'
 import { format } from 'prettier'
 
-const ignore = ['**/.git/**', '**/node_modules/**']
+const config = config => new Config(config)
+
+const cache = basePath => {
+    if (!basePath) {
+        return
+    }
+
+    return new Cache({ basePath })
+}
 
 export default class Writer {
     constructor(options) {
-        this.config = new Config()
+        this.using({
+            ignore: ['**/.git/**', '**/node_modules/**'],
+            cache: resolve(import.meta.dirname, '.cache'),
+        })
 
-        this.using({ ignore }).using(options)
+        this.using(options)
+
+        this.config = config()
+
+        this.cache = cache(this.options.cache)
     }
 
     using(options = {}) {
         this.options ||= {}
 
         this.options = { ...this.options, ...options }
+    }
 
-        return this
+    async hash(content) {
+        return await hash(content, {
+            algorithm: 'md5',
+        })
+    }
+
+    async read(file) {
+        if (!exists(file)) {
+            return
+        }
+
+        const content = await readFile(file, 'utf8')
+
+        const cache = await this.cache?.get(file)
+
+        const hash = cache && (await this.hash(content))
+
+        if (cache === hash) {
+            return
+        }
+
+        return content
+    }
+
+    async save(file, content) {
+        await writeFile(file, content)
+
+        await this.cache?.set(file, await this.hash(content))
     }
 
     async all(config = {}) {
@@ -25,7 +71,7 @@ export default class Writer {
 
         const files = await glob('**/**', {
             nodir: true,
-            ansolute: true,
+            absolute: true,
             cwd: this.options.root,
             ignore: this.options.ignore,
         }).then(files => files.map(write))
@@ -34,9 +80,11 @@ export default class Writer {
     }
 
     async write(file, config = {}) {
-        await this.options.before?.(file)
+        const source = await this.read(file)
 
-        const source = await readFile(file, 'utf8')
+        if (!source) {
+            return
+        }
 
         const configuration = await this.config.get({ config })
 
@@ -45,8 +93,6 @@ export default class Writer {
             ...configuration,
         })
 
-        await writeFile(file, content)
-
-        await this.options.after?.(file)
+        await this.save(file, content)
     }
 }

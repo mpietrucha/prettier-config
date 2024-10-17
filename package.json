@@ -1,6 +1,6 @@
 {
     "name": "@mpietrucha/prettier",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "license": "MIT",
     "author": {
         "name": "Michał Pietrucha",
@@ -28,7 +28,9 @@
     ],
     "prettier": "@mpietrucha/prettier",
     "dependencies": {
+        "file-system-cache": "^3.0.0-alpha.8",
         "glob": "^11.0.0",
+        "hasha": "^6.0.0",
         "prettier": "^3.3.3",
         "prettier-plugin-organize-imports": "^4.1.0",
         "prettier-plugin-packagejson": "^2.5.3",
