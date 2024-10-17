@@ -54,7 +54,7 @@ export default class Writer {
 
         const hash = cache && (await this.hash(content))
 
-        if (cache === hash) {
+        if (cache && cache === hash) {
             return
         }
 
