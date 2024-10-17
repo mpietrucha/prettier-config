@@ -4,37 +4,56 @@ import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 import { glob } from 'glob'
 import { hash } from 'hasha'
-import { resolve } from 'path'
+import noop from 'lodash.noop'
+import { minimatch } from 'minimatch'
+import { dirname, join, resolve } from 'path'
 import { format } from 'prettier'
 
-const config = config => new Config(config)
-
-const cache = basePath => {
-    if (!basePath) {
-        return
-    }
-
-    return new Cache({ basePath })
-}
-
 export default class Writer {
-    constructor(options) {
-        this.using({
-            ignore: ['**/.git/**', '**/node_modules/**'],
-            cache: resolve(import.meta.dirname, '.cache'),
+    constructor(options = {}) {
+        const {
+            cwd = process.cwd(),
+            ignore = ['**/.git/**', '**/node_modules/**'],
+            cache = ((cache = '.cache') => {
+                const local = dirname(import.meta.dirname)
+
+                return resolve(local, cache)
+            })(),
+        } = options
+
+        if (!cwd) {
+            throw new Error('Writer `options.cwd` must be present.')
+        }
+
+        this.cwd = `${cwd}`
+
+        this.config = new Config()
+
+        this.ignore = new Set([ignore].flat().filter(String))
+
+        if (!cache) {
+            return
+        }
+
+        this.cache = new Cache({
+            basePath: cache,
         })
 
-        this.using(options)
-
-        this.config = config()
-
-        this.cache = cache(this.options.cache)
+        this.ignore.add(join(cache, '/**'))
     }
 
-    using(options = {}) {
-        this.options ||= {}
+    ignored(without) {
+        const ignored = [...this.ignore.values()]
 
-        this.options = { ...this.options, ...options }
+        if (!Array.isArray(without)) {
+            return ignored
+        }
+
+        return ignored.filter(ignore => !without.includes(ignore))
+    }
+
+    ignoring(file, without) {
+        return this.ignored(without).find(ignore => minimatch(file, ignore))
     }
 
     async hash(content) {
@@ -45,6 +64,10 @@ export default class Writer {
 
     async read(file) {
         if (!existsSync(file)) {
+            return
+        }
+
+        if (this.ignoring(file)) {
             return
         }
 
@@ -65,6 +88,8 @@ export default class Writer {
         await writeFile(file, content)
 
         await this.cache?.set(file, await this.hash(content))
+
+        return file
     }
 
     async all(config = {}) {
@@ -72,12 +97,14 @@ export default class Writer {
 
         const files = await glob('**/**', {
             nodir: true,
+            cwd: this.cwd,
             absolute: true,
-            cwd: this.options.root,
-            ignore: this.options.ignore,
-        }).then(files => files.map(write))
+            ignore: this.ignored(),
+        })
 
-        await Promise.all(files)
+        await Promise.all(files.map(write))
+
+        return files
     }
 
     async write(file, config = {}) {
@@ -92,8 +119,10 @@ export default class Writer {
         const content = await format(source, {
             filepath: file,
             ...configuration,
-        })
+        }).catch(noop)
 
-        await this.save(file, content)
+        content && (await this.save(file, content))
+
+        return !!content
     }
 }

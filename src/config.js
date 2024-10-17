@@ -1,4 +1,6 @@
 import config from '@'
+import isObject from 'lodash.isobject'
+import noop from 'lodash.noop'
 import { resolveConfig } from 'prettier'
 
 export default class Config {
@@ -18,7 +20,7 @@ export default class Config {
             return this.cache.get(file)
         }
 
-        const config = await resolveConfig(file)
+        const config = await resolveConfig(file).catch(noop)
 
         if (!config) {
             return this.file()
@@ -33,7 +35,7 @@ export default class Config {
         const output = {}
 
         if (base) {
-            Object.assign(output, this.base)
+            isObject(this.base) && Object.assign(output, this.base)
         }
 
         if (file) {
@@ -41,9 +43,13 @@ export default class Config {
         }
 
         if (runtime) {
-            Object.assign(output, this.runtime)
+            isObject(this.runtime) && Object.assign(output, this.runtime)
         }
 
-        return { ...cache, ...output }
+        if (isObject(cache)) {
+            Object.assign(output, cache)
+        }
+
+        return output
     }
 }
