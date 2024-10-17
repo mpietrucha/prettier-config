@@ -1,6 +1,7 @@
 import Config from '@/config'
 import Cache from 'file-system-cache'
-import { existsSync, readFile, writeFile } from 'fs/promises'
+import { existsSync } from 'fs'
+import { readFile, writeFile } from 'fs/promises'
 import { glob } from 'glob'
 import { hash } from 'hasha'
 import { resolve } from 'path'
